@@ -156,7 +156,7 @@ to exclude the API function. */
 format the raw data provided by the uxTaskGetSystemState() function in to human
 readable ASCII form.  See the notes in the implementation of vTaskList() within
 FreeRTOS/Source/tasks.c for limitations. */
-#define configUSE_STATS_FORMATTING_FUNCTIONS	1
+#define configUSE_STATS_FORMATTING_FUNCTIONS	0
 
 /* portCONFIGURE_TIMER_FOR_RUN_TIME_STATS is not required because the time base
 comes from the ulHighFrequencyTimerCounts variable which is incremented in a
