@@ -61,8 +61,6 @@
 /* Added Galileo serial support. */
 #include "galileo_support.h"
 
-#include "Qemu/boot.h"
-
 /* Set to 1 to sit in a loop on start up, allowing a debugger to connect to the
 application before main() executes. */
 #define mainWAIT_FOR_DEBUG_CONNECTION 		0
@@ -138,7 +136,7 @@ int main( void )
 	of this file. */
 	#if( mainCREATE_SIMPLE_BLINKY_DEMO_ONLY == 1 )
 	{
-		g_printf_rcc( 3, 2, DEFAULT_SCREEN_COLOR, "Running main_blinky()." );
+		// g_printf_rcc( 3, 2, DEFAULT_SCREEN_COLOR, "Running main_blinky()." );
 		main_blinky();
 	}
 	#else
@@ -308,6 +306,7 @@ static void prvSetupHardware( void )
 
 	/* Print RTOS loaded message. */
 	vPrintBanner();
+	debugcon_printf("after print banner\n");
 }
 /*-----------------------------------------------------------*/
 

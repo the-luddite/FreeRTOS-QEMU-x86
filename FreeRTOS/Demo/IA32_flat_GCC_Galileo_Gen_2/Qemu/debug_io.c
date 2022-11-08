@@ -10,3 +10,15 @@ void debug_putchar(char ch)
 {
     outb(ch, (IOBASE));
 }
+
+void galileo_printchar(char **str, int c)
+{
+	if (str) {
+		**str = (char)c;
+		++(*str);
+	}
+	else
+	{
+		debug_putchar( c );
+	}
+}

@@ -33,6 +33,9 @@
 
 #define IOBASE 0x402
 
+#define printchar galileo_printchar
+
+void galileo_printchar(char **str, int c);
 void debugcon_printf(const char *, ...);
 
 #endif /* _DEBUGCON_PRINTF_H_ */
