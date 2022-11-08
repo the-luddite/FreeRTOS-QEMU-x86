@@ -189,7 +189,7 @@ void setsegs()
 
 	 if (xSemaphoreTakeRecursive(semPrintfGate, MUTEX_WAIT_TIME ))
 	 {
-		 UngatedMoveToScreenPosition(row, col);
+		//  UngatedMoveToScreenPosition(row, col);
 		 printf("%s",color);
 	     va_list arguments;
 	     va_start(arguments,format);
