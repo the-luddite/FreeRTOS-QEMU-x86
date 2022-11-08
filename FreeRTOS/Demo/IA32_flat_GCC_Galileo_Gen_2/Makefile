@@ -50,8 +50,9 @@ __include += -I../../Source/portable/GCC/IA32_flat
 
 
 #__CFLAGS = -m32 -g -nostdlib -nostartfiles -ffreestanding -Iinclude -mgeneral-regs-only -ggdb3 $(CFLAGS) $(INCLUDE) $(__include)
-__CFLAGS = -m32 -Iinclude -nostartfiles -nostdlib -ffreestanding -g $(CFLAGS) $(INCLUDE) $(__include)
-__SFLAGS = -m32 $(INCLUDE) $(__include) $(SFLAGS)
+M32 = -m32
+__CFLAGS = $(M32) -Iinclude -nostartfiles -nostdlib -ffreestanding -g $(CFLAGS) $(INCLUDE) $(__include)
+__SFLAGS = $(M32) $(INCLUDE) $(__include) $(SFLAGS)
 __LDFLAGS = -nostdlib $(LDFLAGS)
 
 OBJECTS = $(__c_target:.c=.o) $(__s_target:.S=.o)
@@ -69,7 +70,7 @@ clean:
 
 elf:$(OBJECTS)
 	@echo $(OBJECTS)
-	$(CC) -m32 -T Qemu/linker.ld $(OBJECTS) -o $(ELFFILE) -nostdlib -ffreestanding -lgcc
+	$(CC) $(M32) -T Qemu/linker.ld $(OBJECTS) -o $(ELFFILE) -nostdlib -ffreestanding -lgcc
 
 qemu:
 	qemu-system-i386 -kernel $(ELFFILE) -nographic -serial mon:stdio -s -S
