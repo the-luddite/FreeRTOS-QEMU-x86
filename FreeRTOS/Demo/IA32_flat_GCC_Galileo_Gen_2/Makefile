@@ -1,5 +1,9 @@
 ELFFILE = frtos.elf
 
+ifdef QEMU_DEBUG
+__QEMU_DEBUG = -s -S
+endif
+
 # application
 __c_target = main.c
 __c_target += Blinky_Demo/main_blinky.c
@@ -78,4 +82,4 @@ elf:$(OBJECTS)
 	$(CC) $(M32) -T Qemu/linker.ld $(OBJECTS) -o $(ELFFILE) -nostdlib -ffreestanding -lgcc
 
 qemu:
-	qemu-system-i386 -kernel $(ELFFILE) -s -S -chardev stdio,id=seabios -device isa-debugcon,iobase=0x402,chardev=seabios
+	qemu-system-i386 -kernel $(ELFFILE) $(__QEMU_DEBUG) -chardev stdio,id=seabios -device isa-debugcon,iobase=0x402,chardev=seabios
