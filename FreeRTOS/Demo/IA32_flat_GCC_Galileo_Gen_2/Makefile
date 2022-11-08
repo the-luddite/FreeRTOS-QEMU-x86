@@ -12,7 +12,7 @@ __s_target += Qemu/startup.S
 # kernel
 __c_target += $(wildcard ../../Source/*.c)
 __c_target += $(wildcard ../../Source/portable/GCC/IA32_flat/*.c)
-__c_target += $(wildcard ../../Source/portable/MemMang/heap_5.c)
+__c_target += $(wildcard ../../Source/portable/MemMang/heap_4.c)
 # __c_target += $(wildcard ../Common/Minimal/*.c)
 
 __c_target += ../Common/Minimal/AbortDelay.c
