@@ -140,13 +140,6 @@ hang:
 	inl		%dx, %eax
 	ret
 
-	/* outb */
-	.globl	outb
-	outb:	movl	4(%esp), %edx
-	movl	8(%esp), %eax
-	outb	%al, %dx
-	ret
-
 	/* outw */
 	.globl	outw
 	outw:	movl	4(%esp), %edx

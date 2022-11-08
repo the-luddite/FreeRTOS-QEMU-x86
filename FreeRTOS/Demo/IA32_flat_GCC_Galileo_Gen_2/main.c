@@ -61,6 +61,8 @@
 /* Added Galileo serial support. */
 #include "galileo_support.h"
 
+#include "Qemu/boot.h"
+
 /* Set to 1 to sit in a loop on start up, allowing a debugger to connect to the
 application before main() executes. */
 #define mainWAIT_FOR_DEBUG_CONNECTION 		0
@@ -123,6 +125,9 @@ static void prvClearAssertionLine( void );
 instructions. */
 int main( void )
 {
+	// console_init();
+	debugcon_printf("hello");
+	
 	/* Optionally wait for a debugger to connect. */
 	prvLoopToWaitForDebugConnection();
 
@@ -283,8 +288,8 @@ static void prvSetupHardware( void )
 {
 	/* Initialise the serial port and GPIO. */
 	vInitializeGalileoSerialPort( DEBUG_SERIAL_PORT );
-	vGalileoInitializeGpioController();
-	vGalileoInitializeLegacyGPIO();
+	// vGalileoInitializeGpioController();
+	// vGalileoInitializeLegacyGPIO();
 
 	/* Initialise HPET interrupt(s) */
 	#if( ( mainCREATE_SIMPLE_BLINKY_DEMO_ONLY != 1 ) && ( hpetHPET_TIMER_IN_USE != 0 ) )
@@ -295,11 +300,11 @@ static void prvSetupHardware( void )
 	#endif
 
 	/* Setup the LED. */
-	vGalileoLegacyGPIOInitializationForLED();
+	// vGalileoLegacyGPIOInitializationForLED();
 
 	/* Demonstrates how to calibrate LAPIC Timer.  The calibration value
 	calculated here may get overwritten when the scheduler starts. */
-	prvCalibrateLVTimer();
+	// prvCalibrateLVTimer();
 
 	/* Print RTOS loaded message. */
 	vPrintBanner();
