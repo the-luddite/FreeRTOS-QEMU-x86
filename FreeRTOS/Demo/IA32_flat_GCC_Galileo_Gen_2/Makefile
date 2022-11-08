@@ -1,6 +1,4 @@
-TOPTARGETS := all clean
-QEMU_ARGS = -m 1024 -machine virt -cpu cortex-a57 -kernel core/core.bin -nographic -display none -serial mon:stdio
-
+ELFFILE = frtos.elf
 
 # application
 __c_target = main.c
@@ -9,7 +7,7 @@ __c_target += $(wildcard Full_Demo/*.c)
 __c_target += $(wildcard Support_Files/*.c)
 
 __s_target = $(wildcard Full_Demo/*.S)
-__s_target += $(wildcard Support_Files/*.S)
+__s_target += Qemu/startup.S
 
 # kernel
 __c_target += $(wildcard ../../Source/*.c)
@@ -17,32 +15,28 @@ __c_target += $(wildcard ../../Source/portable/GCC/IA32_flat/*.c)
 __c_target += $(wildcard ../../Source/portable/MemMang/heap_5.c)
 # __c_target += $(wildcard ../Common/Minimal/*.c)
 
-__c_target          += ../Common/Minimal/AbortDelay.c
-__c_target          += ../Common/Minimal/BlockQ.c
-__c_target          += ../Common/Minimal/blocktim.c
-__c_target          += ../Common/Minimal/countsem.c
-__c_target          += ../Common/Minimal/death.c
-__c_target          += ../Common/Minimal/dynamic.c
-__c_target          += ../Common/Minimal/EventGroupsDemo.c
-__c_target          += ../Common/Minimal/flop.c
-__c_target          += ../Common/Minimal/GenQTest.c
-__c_target          += ../Common/Minimal/integer.c
-__c_target          += ../Common/Minimal/IntSemTest.c
-# __c_target          += ../Common/Minimal/MessageBufferAMP.c
-# __c_target          += ../Common/Minimal/MessageBufferDemo.c
-__c_target          += ../Common/Minimal/PollQ.c
-__c_target          += ../Common/Minimal/QPeek.c
-__c_target          += ../Common/Minimal/QueueOverwrite.c
-__c_target          += ../Common/Minimal/QueueSet.c
-__c_target          += ../Common/Minimal/QueueSetPolling.c
-__c_target          += ../Common/Minimal/recmutex.c
-__c_target          += ../Common/Minimal/semtest.c
-__c_target          += ../Common/Minimal/StaticAllocation.c
-# __c_target          += ../Common/Minimal/StreamBufferDemo.c
-# __c_target          += ../Common/Minimal/StreamBufferInterrupt.c
-__c_target          += ../Common/Minimal/TaskNotify.c
-__c_target          += ../Common/Minimal/TimerDemo.c
-__c_target          += ../Common/Minimal/IntQueue.c
+__c_target += ../Common/Minimal/AbortDelay.c
+__c_target += ../Common/Minimal/BlockQ.c
+__c_target += ../Common/Minimal/blocktim.c
+__c_target += ../Common/Minimal/countsem.c
+__c_target += ../Common/Minimal/death.c
+__c_target += ../Common/Minimal/dynamic.c
+__c_target += ../Common/Minimal/EventGroupsDemo.c
+__c_target += ../Common/Minimal/flop.c
+__c_target += ../Common/Minimal/GenQTest.c
+__c_target += ../Common/Minimal/integer.c
+__c_target += ../Common/Minimal/IntSemTest.c
+__c_target += ../Common/Minimal/PollQ.c
+__c_target += ../Common/Minimal/QPeek.c
+__c_target += ../Common/Minimal/QueueOverwrite.c
+__c_target += ../Common/Minimal/QueueSet.c
+__c_target += ../Common/Minimal/QueueSetPolling.c
+__c_target += ../Common/Minimal/recmutex.c
+__c_target += ../Common/Minimal/semtest.c
+__c_target += ../Common/Minimal/StaticAllocation.c
+__c_target += ../Common/Minimal/TaskNotify.c
+__c_target += ../Common/Minimal/TimerDemo.c
+__c_target += ../Common/Minimal/IntQueue.c
 
 __s_target += $(wildcard ../../Source/portable/GCC/IA32_flat/*.S)
 
@@ -68,11 +62,14 @@ OBJECTS = $(__c_target:.c=.o) $(__s_target:.S=.o)
 %.o: %.S
 	$(CC) $(__SFLAGS) -c $< -o $@
 
-all: frtos.bin
+all: elf
 
 clean:
-	rm -rf $(OBJECTS)
+	rm -rf $(OBJECTS) $(ELFFILE)
 
-frtos.bin:$(OBJECTS)
+elf:$(OBJECTS)
 	@echo $(OBJECTS)
-	$(CC) -m32 -T elf_ia32_efi.lds $(OBJECTS) -o frtos.bin -nostdlib -ffreestanding -lgcc
+	$(CC) -m32 -T Qemu/linker.ld $(OBJECTS) -o $(ELFFILE) -nostdlib -ffreestanding -lgcc
+
+qemu:
+	qemu-system-i386 -kernel $(ELFFILE) -nographic -serial mon:stdio -s -S

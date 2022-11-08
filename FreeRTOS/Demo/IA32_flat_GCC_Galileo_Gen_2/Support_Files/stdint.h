@@ -51,4 +51,8 @@ typedef signed long long int64_t;
 typedef unsigned long long uint64_t;
 typedef uint32_t uintn_t;
 
+#ifndef SIZE_MAX
+    #define SIZE_MAX    ( ( size_t ) -1 )
+#endif
+
 #endif /* FREERTOS_STDINT */
