@@ -38,6 +38,11 @@ __c_target += ../Common/Minimal/TaskNotify.c
 __c_target += ../Common/Minimal/TimerDemo.c
 __c_target += ../Common/Minimal/IntQueue.c
 
+# __c_target += Qemu/early_serial_console.c
+# __c_target += Qemu/tty.c
+__c_target += Qemu/debugcon_printf.c
+__c_target += Qemu/debug_io.c
+
 __s_target += $(wildcard ../../Source/portable/GCC/IA32_flat/*.S)
 
 
@@ -73,4 +78,4 @@ elf:$(OBJECTS)
 	$(CC) $(M32) -T Qemu/linker.ld $(OBJECTS) -o $(ELFFILE) -nostdlib -ffreestanding -lgcc
 
 qemu:
-	qemu-system-i386 -kernel $(ELFFILE) -nographic -serial mon:stdio -s -S
+	qemu-system-i386 -kernel $(ELFFILE) -s -S -chardev stdio,id=seabios -device isa-debugcon,iobase=0x402,chardev=seabios
