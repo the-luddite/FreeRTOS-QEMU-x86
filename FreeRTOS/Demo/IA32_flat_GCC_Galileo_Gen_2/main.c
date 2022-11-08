@@ -306,7 +306,6 @@ static void prvSetupHardware( void )
 
 	/* Print RTOS loaded message. */
 	vPrintBanner();
-	debugcon_printf("after print banner\n");
 }
 /*-----------------------------------------------------------*/
 
