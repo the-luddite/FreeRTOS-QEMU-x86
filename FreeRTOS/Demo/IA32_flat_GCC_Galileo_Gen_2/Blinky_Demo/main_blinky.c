@@ -123,9 +123,7 @@ void main_blinky( void )
 					NULL, 								/* The parameter passed to the task - not used in this case. */
 					mainQUEUE_RECEIVE_TASK_PRIORITY, 	/* The priority assigned to the task. */
 					NULL );								/* The task handle is not required, so NULL is passed. */
-
 		xTaskCreate( prvQueueSendTask, "TX", configMINIMAL_STACK_SIZE * 2, NULL, mainQUEUE_SEND_TASK_PRIORITY, NULL );
-
 		/* Start the tasks and timer running. */
 		vTaskStartScheduler();
 	}
@@ -146,9 +144,9 @@ static void prvQueueSendTask( void *pvParameters )
 {
 TickType_t xNextWakeTime;
 const uint32_t ulValueToSend = 100UL;
-
 	/* Remove compiler warning about unused parameter. */
 	( void ) pvParameters;
+	g_printf_rcc( 6, 2, DEFAULT_SCREEN_COLOR, "Entered TX task\r\n");
 
 	/* Initialise xNextWakeTime - this only needs to be done once. */
 	xNextWakeTime = xTaskGetTickCount();
@@ -163,6 +161,7 @@ const uint32_t ulValueToSend = 100UL;
 		operation will not block - it shouldn't need to block as the queue
 		should always be empty at this point in the code. */
 		xQueueSend( xQueue, &ulValueToSend, 0U );
+		g_printf_rcc( 6, 2, DEFAULT_SCREEN_COLOR, "TX Task 1\r\n");
 	}
 }
 /*-----------------------------------------------------------*/
@@ -176,7 +175,7 @@ const uint32_t ulExpectedValue = 100UL;
 	( void ) pvParameters;
 
 	/* Initial cursor position to skip a line) */
-	g_printf_rcc( 5, 2, DEFAULT_SCREEN_COLOR, "LED on the Galileo board should be blinking." );
+	g_printf_rcc( 5, 2, DEFAULT_SCREEN_COLOR, "LED on the Galileo board should be blinking.\n" );
 
 	for( ;; )
 	{
@@ -192,12 +191,13 @@ const uint32_t ulExpectedValue = 100UL;
 		{
 			/* Toggle the LED, and also print the LED toggle state to the
 			UART. */
-			ulLEDStatus = ulBlinkLED();
+			// ulLEDStatus = ulBlinkLED();
 
 			/* Print the LED status */
-			g_printf_rcc( 6, 2, DEFAULT_SCREEN_COLOR, "LED State = %d\r\n", ( int ) ulLEDStatus );
 			ulReceivedValue = 0U;
+			g_printf_rcc( 6, 2, DEFAULT_SCREEN_COLOR, "RX Task 2\r\n");
 		}
+		
 	}
 }
 /*-----------------------------------------------------------*/
