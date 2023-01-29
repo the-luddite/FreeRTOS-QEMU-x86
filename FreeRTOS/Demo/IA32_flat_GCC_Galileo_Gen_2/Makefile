@@ -6,7 +6,7 @@ endif
 
 # application
 __c_target = main.c
-__c_target += Blinky_Demo/main_blinky.c
+__c_target += Blinky_Demo/main_rxtx_queue.c
 __c_target += $(wildcard Full_Demo/*.c)
 __c_target += $(wildcard Support_Files/*.c)
 

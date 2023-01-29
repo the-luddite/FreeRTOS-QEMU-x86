@@ -97,7 +97,7 @@ static void prvQueueSendTask( void *pvParameters );
  * Called by main() to create the simply blinky style application if
  * mainCREATE_SIMPLE_BLINKY_DEMO_ONLY is set to 1.
  */
-void main_blinky( void );
+void main_rxtx_queue( void );
 
 /*-----------------------------------------------------------*/
 
@@ -108,7 +108,7 @@ static QueueHandle_t xQueue = NULL;
 
 /* See http://www.FreeRTOS.org/RTOS_Intel_Quark_Galileo_GCC.html for usage
 instructions. */
-void main_blinky( void )
+void main_rxtx_queue( void )
 {
 	/* Create the queue. */
 	xQueue = xQueueCreate( mainQUEUE_LENGTH, sizeof( uint32_t ) );

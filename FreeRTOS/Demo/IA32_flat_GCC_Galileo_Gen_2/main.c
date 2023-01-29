@@ -24,24 +24,6 @@
  *
  */
 
-/******************************************************************************
- * This project provides two demo applications.  A simple blinky style project,
- * and a more comprehensive test and demo application.  The
- * mainCREATE_SIMPLE_BLINKY_DEMO_ONLY setting (defined in this file) is used to
- * select between the two.  The simply blinky demo is implemented and described
- * in main_blinky.c.  The more comprehensive test and demo application is
- * implemented and described in main_full.c.
- *
- * This file implements the code that is not demo specific, including the
- * hardware setup and FreeRTOS hook functions.
- *
- * ENSURE TO READ THE DOCUMENTATION PAGE FOR THIS PORT AND DEMO APPLICATION ON
- * THE http://www.FreeRTOS.org WEB SITE FOR FULL INFORMATION ON USING THIS DEMO
- * APPLICATION, AND ITS ASSOCIATE FreeRTOS ARCHITECTURE PORT!
- * https://www.FreeRTOS.org/RTOS_Intel_Quark_Galileo_GCC.html
- *
- */
-
 /* Standard includes. */
 #include <stdlib.h>
 
@@ -71,12 +53,8 @@ or 0 to run the more comprehensive test and demo application. */
 
 /*-----------------------------------------------------------*/
 
-/*
- * main_blinky() is used when mainCREATE_SIMPLE_BLINKY_DEMO_ONLY is set to 1.
- * main_full() is used when mainCREATE_SIMPLE_BLINKY_DEMO_ONLY is set to 0.
- */
 #if( mainCREATE_SIMPLE_BLINKY_DEMO_ONLY == 1 )
-	extern void main_blinky( void );
+	extern void main_rxtx_queue( void );
 #else
 	extern void main_full( void );
 #endif /* mainCREATE_SIMPLE_BLINKY_DEMO_ONLY == 1 */
@@ -133,8 +111,7 @@ int main( void )
 	of this file. */
 	#if( mainCREATE_SIMPLE_BLINKY_DEMO_ONLY == 1 )
 	{
-		// g_printf_rcc( 3, 2, DEFAULT_SCREEN_COLOR, "Running main_blinky()." );
-		main_blinky();
+		main_rxtx_queue();
 	}
 	#else
 	{
