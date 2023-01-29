@@ -201,15 +201,12 @@ void setsegs()
 
  void vPrintBanner( void )
  {
-	 if (bGalileoSerialPortInitialized)
-	 {
-		/* Print an RTOSDemo Loaded message */
-		ClearScreen();
-		g_printf_rcc(1, 2, DEFAULT_BANNER_COLOR,
-		"%c[1mHELLO from the multiboot compliant FreeRTOS kernel!%c[0m",
-		(char) 0x1B, (char) 0x1B );
-		printf(ANSI_HIDE_CURSOR);
-	 }
+	/* Print an RTOSDemo Loaded message */
+	ClearScreen();
+	g_printf_rcc(1, 2, DEFAULT_BANNER_COLOR,
+	"%c[1mHELLO from the multiboot compliant FreeRTOS kernel!\n%c[0m",
+	(char) 0x1B, (char) 0x1B );
+	printf(ANSI_HIDE_CURSOR);
  }
  /*-----------------------------------------------------------*/
 
