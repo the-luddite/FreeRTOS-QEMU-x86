@@ -122,10 +122,7 @@ static void prvClearAssertionLine( void );
 /* See http://www.FreeRTOS.org/RTOS_Intel_Quark_Galileo_GCC.html for usage
 instructions. */
 int main( void )
-{
-	// console_init();
-	debugcon_printf("hello");
-	
+{	
 	/* Optionally wait for a debugger to connect. */
 	prvLoopToWaitForDebugConnection();
 
@@ -284,11 +281,6 @@ void vApplicationTickHook( void )
 
 static void prvSetupHardware( void )
 {
-	/* Initialise the serial port and GPIO. */
-	vInitializeGalileoSerialPort( DEBUG_SERIAL_PORT );
-	// vGalileoInitializeGpioController();
-	// vGalileoInitializeLegacyGPIO();
-
 	/* Initialise HPET interrupt(s) */
 	#if( ( mainCREATE_SIMPLE_BLINKY_DEMO_ONLY != 1 ) && ( hpetHPET_TIMER_IN_USE != 0 ) )
 	{
@@ -296,13 +288,6 @@ static void prvSetupHardware( void )
 		vInitializeAllHPETInterrupts();
 	}
 	#endif
-
-	/* Setup the LED. */
-	// vGalileoLegacyGPIOInitializationForLED();
-
-	/* Demonstrates how to calibrate LAPIC Timer.  The calibration value
-	calculated here may get overwritten when the scheduler starts. */
-	// prvCalibrateLVTimer();
 
 	/* Print RTOS loaded message. */
 	vPrintBanner();
