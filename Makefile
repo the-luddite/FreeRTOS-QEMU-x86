@@ -1,4 +1,4 @@
-DEMO_PATH=FreeRTOS/Demo/IA32_flat_GCC_Galileo_Gen_2
+DEMO_PATH=FreeRTOS/Demo/QEMU_x86
 CC=gcc-7
 
 all:
