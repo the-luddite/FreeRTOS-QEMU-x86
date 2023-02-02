@@ -48,8 +48,8 @@
 #include "task.h"
 
 /* Demo app includes. */
-#include "IntQueue.h"
-#include "IntQueueTimer.h"
+// #include "IntQueue.h"
+// #include "IntQueueTimer.h"
 
 #if ( INCLUDE_eTaskGetState != 1 )
     #error INCLUDE_eTaskGetState must be set to 1 in FreeRTOSConfig.h to use this demo file.

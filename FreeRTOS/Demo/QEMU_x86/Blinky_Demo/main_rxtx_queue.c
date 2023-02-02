@@ -24,53 +24,12 @@
  *
  */
 
-/******************************************************************************
- * NOTE 1:  This project provides two demo applications.  A simple blinky style
- * project, and a more comprehensive test and demo application.  The
- * mainCREATE_SIMPLE_BLINKY_DEMO_ONLY setting in main.c is used to select
- * between the two.  See the notes on using mainCREATE_SIMPLE_BLINKY_DEMO_ONLY
- * in main.c.  This file implements the simply blinky style version.
- *
- * NOTE 2:  This file only contains the source code that is specific to the
- * basic demo.  Generic functions, such FreeRTOS hook functions, and functions
- * required to configure the hardware are defined in main.c.
- ******************************************************************************
- *
- * See http://www.FreeRTOS.org/RTOS_Intel_Quark_Galileo_GCC.html for usage
- * instructions.
- *
- * main_blinky() creates one queue, and two tasks.  It then starts the
- * scheduler.
- *
- * The Queue Send Task:
- * The queue send task is implemented by the prvQueueSendTask() function in
- * this file.  prvQueueSendTask() sits in a loop that causes it to repeatedly
- * block for 200 milliseconds, before sending the value 100 to the queue that
- * was created within main_blinky().  Once the value is sent, the task loops
- * back around to block for another 200 milliseconds...and so on.
- *
- * The Queue Receive Task:
- * The queue receive task is implemented by the prvQueueReceiveTask() function
- * in this file.  prvQueueReceiveTask() sits in a loop where it repeatedly
- * blocks on attempts to read data from the queue that was created within
- * main_blinky().  When data is received, the task checks the value of the
- * data, and if the value equals the expected 100, outputs a message to the COM
- * port.  The 'block time' parameter passed to the queue receive function
- * specifies that the task should be held in the Blocked state indefinitely to
- * wait for data to be available on the queue.  The queue receive task will only
- * leave the Blocked state when the queue send task writes to the queue.  As the
- * queue send task writes to the queue every 200 milliseconds, the queue receive
- * task leaves the Blocked state every 200 milliseconds, and therefore writes to
- * the COM port every 200 milliseconds.
- */
-
 /* Kernel includes. */
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
 
-/* Added Galileo SERIAL support */
-#include "galileo_support.h"
+#include "platform_support.h"
 
 /* Priorities at which the tasks are created. */
 #define mainQUEUE_RECEIVE_TASK_PRIORITY		( tskIDLE_PRIORITY + 2 )
@@ -93,10 +52,6 @@ the queue empty. */
 static void prvQueueReceiveTask( void *pvParameters );
 static void prvQueueSendTask( void *pvParameters );
 
-/*
- * Called by main() to create the simply blinky style application if
- * mainCREATE_SIMPLE_BLINKY_DEMO_ONLY is set to 1.
- */
 void main_rxtx_queue( void );
 
 /*-----------------------------------------------------------*/
@@ -106,8 +61,6 @@ static QueueHandle_t xQueue = NULL;
 
 /*-----------------------------------------------------------*/
 
-/* See http://www.FreeRTOS.org/RTOS_Intel_Quark_Galileo_GCC.html for usage
-instructions. */
 void main_rxtx_queue( void )
 {
 	/* Create the queue. */
@@ -146,7 +99,7 @@ TickType_t xNextWakeTime;
 const uint32_t ulValueToSend = 100UL;
 	/* Remove compiler warning about unused parameter. */
 	( void ) pvParameters;
-	g_printf_rcc( 6, 2, DEFAULT_SCREEN_COLOR, "Entered TX task\r\n");
+	g_printf_rcc( 6, 2, DEFAULT_SCREEN_COLOR, "Entered TX Task\r\n");
 
 	/* Initialise xNextWakeTime - this only needs to be done once. */
 	xNextWakeTime = xTaskGetTickCount();
@@ -175,7 +128,7 @@ const uint32_t ulExpectedValue = 100UL;
 	( void ) pvParameters;
 
 	/* Initial cursor position to skip a line) */
-	g_printf_rcc( 5, 2, DEFAULT_SCREEN_COLOR, "LED on the Galileo board should be blinking.\n" );
+	g_printf_rcc( 5, 2, DEFAULT_SCREEN_COLOR, "Entered RX Task\n" );
 
 	for( ;; )
 	{
@@ -191,7 +144,6 @@ const uint32_t ulExpectedValue = 100UL;
 		{
 			/* Toggle the LED, and also print the LED toggle state to the
 			UART. */
-			// ulLEDStatus = ulBlinkLED();
 
 			/* Print the LED status */
 			ulReceivedValue = 0U;

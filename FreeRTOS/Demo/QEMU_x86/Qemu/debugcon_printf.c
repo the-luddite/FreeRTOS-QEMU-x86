@@ -36,27 +36,6 @@
  * in the debugcon_printf() implementation.
  */
 
-#ifdef va_list
-#undef va_list
-#endif
-
-#ifdef va_arg
-#undef va_arg
-#endif
-
-#ifdef va_start
-#undef va_start
-#endif
-
-#ifdef va_end
-#undef va_end
-#endif
-
-#define va_list __builtin_va_list
-#define va_arg __builtin_va_arg
-#define va_start __builtin_va_start
-#define va_end __builtin_va_end
-
 static void
 internal_putchar(int c)
 {

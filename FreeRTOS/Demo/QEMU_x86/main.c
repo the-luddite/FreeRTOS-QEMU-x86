@@ -40,24 +40,14 @@
 #include "TaskNotify.h"
 #include "IntQueue.h"
 
-/* Added Galileo serial support. */
-#include "galileo_support.h"
+#include "platform_support.h"
 
-/* Set to 1 to sit in a loop on start up, allowing a debugger to connect to the
-application before main() executes. */
-#define mainWAIT_FOR_DEBUG_CONNECTION 		0
-
-/* Set mainCREATE_SIMPLE_BLINKY_DEMO_ONLY to one to run the simple blinky demo,
-or 0 to run the more comprehensive test and demo application. */
-#define mainCREATE_SIMPLE_BLINKY_DEMO_ONLY	1
 
 /*-----------------------------------------------------------*/
 
-#if( mainCREATE_SIMPLE_BLINKY_DEMO_ONLY == 1 )
-	extern void main_rxtx_queue( void );
-#else
-	extern void main_full( void );
-#endif /* mainCREATE_SIMPLE_BLINKY_DEMO_ONLY == 1 */
+
+extern void main_rxtx_queue( void );
+
 
 /* Prototypes for functions called from asm start up code. */
 int main( void );
@@ -77,15 +67,8 @@ void vApplicationTickHook( void );
  * demo.
  */
 static void prvSetupHardware( void );
-static void prvCalibrateLVTimer( void );
+// static void prvCalibrateLVTimer( void );
 
-/*
- * If mainWAIT_FOR_DEBUG_CONNECTION is set to 1 then the following function will
- * sit in a loop on start up, allowing a debugger to connect to the application
- * before main() executes.  If mainWAIT_FOR_DEBUG_CONNECTION is not set to 1
- * then the following function does nothing.
- */
-static void prvLoopToWaitForDebugConnection( void );
 
 /*
  * Helper functions used when an assert is triggered.  The first periodically
@@ -101,24 +84,10 @@ static void prvClearAssertionLine( void );
 instructions. */
 int main( void )
 {	
-	/* Optionally wait for a debugger to connect. */
-	prvLoopToWaitForDebugConnection();
-
 	/* Init the UART, GPIO, etc. */
 	prvSetupHardware();
 
-	/* The mainCREATE_SIMPLE_BLINKY_DEMO_ONLY setting is described at the top
-	of this file. */
-	#if( mainCREATE_SIMPLE_BLINKY_DEMO_ONLY == 1 )
-	{
-		main_rxtx_queue();
-	}
-	#else
-	{
-		g_printf_rcc( 3, 2, DEFAULT_SCREEN_COLOR, "Running main_full()." );
-  		main_full();
-	}
-	#endif
+	main_rxtx_queue();
 
 	return 0;
 }
@@ -214,7 +183,7 @@ volatile uint32_t ul = 0;
 		function in order to inspect the location of the assert(). */
 
 		/* Clear any pending key presses. */
-		while( ucGalileoGetchar() != 0 )
+		while( consoleGetchar() != 0 )
 		{
 			/* Nothing to do here - the key press is just discarded. */
 		}
@@ -222,7 +191,7 @@ volatile uint32_t ul = 0;
 		do
 		{
 		   prvDisplayAssertion(pcFile, ulLine);
-		} while ( ( ul == pdFALSE ) && ( ucGalileoGetchar() == 0 ) );
+		} while ( ( ul == pdFALSE ) && ( consoleGetchar() == 0 ) );
 
 		prvClearAssertionLine();
 	}
@@ -232,84 +201,16 @@ volatile uint32_t ul = 0;
 
 void vApplicationTickHook( void )
 {
-	#if( mainCREATE_SIMPLE_BLINKY_DEMO_ONLY == 0 )
-	{
-		extern void vTimerPeriodicISRTests( void );
-
-		/* The full demo includes a software timer demo/test that requires
-		prodding periodically from the tick interrupt. */
-		vTimerPeriodicISRTests();
-
-		/* Call the periodic queue overwrite from ISR demo. */
-		vQueueOverwritePeriodicISRDemo();
-
-		/* Call the periodic event group from ISR demo. */
-		vPeriodicEventGroupsProcessing();
-
-		/* Call the periodic queue set from ISR demo. */
-		vQueueSetAccessQueueSetFromISR();
-
-		/* Use task notifications from an interrupt. */
-		xNotifyTaskFromISR();
-	}
-	#endif
+	return;
 }
 /*-----------------------------------------------------------*/
 
 static void prvSetupHardware( void )
 {
-	/* Initialise HPET interrupt(s) */
-	#if( ( mainCREATE_SIMPLE_BLINKY_DEMO_ONLY != 1 ) && ( hpetHPET_TIMER_IN_USE != 0 ) )
-	{
-		portDISABLE_INTERRUPTS();
-		vInitializeAllHPETInterrupts();
-	}
-	#endif
-
-	/* Print RTOS loaded message. */
 	vPrintBanner();
 }
 /*-----------------------------------------------------------*/
 
-static void prvLoopToWaitForDebugConnection( void )
-{
-	/* Debug if define = 1. */
-	#if( mainWAIT_FOR_DEBUG_CONNECTION == 1 )
-	{
-	/* When using the debugger, set this value to pdFALSE, and the application
-	will sit in a loop at the top of main() to allow the debugger to attached
-	before the application starts running.  Once attached, set
-	ulExitResetSpinLoop to a non-zero value to leave the loop. */
-	volatile uint32_t ulExitResetSpinLoop = pdFALSE;
-
-		/* Must initialize UART before anything will print. */
-		vInitializeGalileoSerialPort( DEBUG_SERIAL_PORT );
-
-		/* RTOS loaded message. */
-		vPrintBanner();
-
-		/* Output instruction message. */
-		MoveToScreenPosition( 3, 1 );
-		g_printf( DEFAULT_SCREEN_COLOR );
-		g_printf( " Waiting for JTAG connection.\n\n\r" );
-		g_printf( ANSI_COLOR_RESET );
-		g_printf( " Once connected, either set ulExitResetSpinLoop to a non-zero value,\n\r" );
-		g_printf( " or you can [PRESS ANY KEY] to start the debug session.\n\n\r" );
-		printf( ANSI_SHOW_CURSOR );
-
-		/* Use the debugger to set the ulExitResetSpinLoop to a non-zero value
-		or press a key to exit this loop, and step through the application.  In
-		Eclipse, simple hover over the variable to see its value in a pop-over
-		box, then edit the value in the pop-over box. */
-		do
-		{
-			portNOP();
-
-		} while( ( ulExitResetSpinLoop == pdFALSE ) && ( ucGalileoGetchar() == 0 ) );
-	}
-	#endif
-}
-/*-----------------------------------------------------------*/
 
 void CRT_Init( void )
 {
@@ -336,33 +237,4 @@ size_t xSize;
 		portAPIC_EOI = 0;
 		x--;
 	} while( x > 0 );
-}
-/*-----------------------------------------------------------*/
-
-static void prvCalibrateLVTimer( void )
-{
-uint32_t uiInitialTimerCounts, uiCalibratedTimerCounts;
-
-	/* Disable LAPIC Counter. */
-	portAPIC_LVT_TIMER = portAPIC_DISABLE;
-
-	/* Calibrate the LV Timer counts to ensure it matches the HPET timer over
-	extended periods. */
-	uiInitialTimerCounts = ( ( configCPU_CLOCK_HZ >> 4UL ) / configTICK_RATE_HZ );
-	uiCalibratedTimerCounts = uiCalibrateTimer( 0, hpetLVTIMER );
-
-	if( uiCalibratedTimerCounts != 0 )
-	{
-		uiInitialTimerCounts = uiCalibratedTimerCounts;
-	}
-
-	/* Set the interrupt frequency. */
-	portAPIC_TMRDIV = portAPIC_DIV_16;
-	portAPIC_TIMER_INITIAL_COUNT = uiInitialTimerCounts;
-
-	/* Enable LAPIC Counter. */
-	portAPIC_LVT_TIMER = portAPIC_TIMER_PERIODIC | portAPIC_TIMER_INT_VECTOR;
-
-	/* Sometimes needed. */
-	portAPIC_TMRDIV = portAPIC_DIV_16;
 }

@@ -7,10 +7,8 @@ endif
 # application
 __c_target = main.c
 __c_target += Blinky_Demo/main_rxtx_queue.c
-__c_target += $(wildcard Full_Demo/*.c)
 __c_target += $(wildcard Support_Files/*.c)
 
-__s_target = $(wildcard Full_Demo/*.S)
 __s_target += Qemu/startup.S
 
 # kernel
@@ -49,7 +47,6 @@ __s_target += $(wildcard ../../Source/portable/GCC/IA32_flat/*.S)
 
 __include = -I.
 __include += -ISupport_Files
-__include += -IFull_Demo
 __include += -I../Common/include
 __include += -I../../Source/include
 __include += -I../../Source/portable/GCC/IA32_flat

@@ -18,20 +18,8 @@
 */
 
 #include <stdarg.h>
-#include "galileo_support.h"
 #include "Qemu/debugcon_printf.h"
 
-// static void printchar(char **str, int c)
-// {
-// 	if (str) {
-// 		**str = (char)c;
-// 		++(*str);
-// 	}
-// 	else
-// 	{
-// 		vGalileoPrintc( c );
-// 	}
-// }
 
 #define PAD_RIGHT 1
 #define PAD_ZERO 2
