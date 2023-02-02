@@ -46,7 +46,7 @@
 /*-----------------------------------------------------------*/
 
 
-extern void main_rxtx_queue( void );
+extern void main_popping_tasks( void );
 
 
 /* Prototypes for functions called from asm start up code. */
@@ -67,7 +67,6 @@ void vApplicationTickHook( void );
  * demo.
  */
 static void prvSetupHardware( void );
-// static void prvCalibrateLVTimer( void );
 
 
 /*
@@ -80,14 +79,12 @@ static void prvClearAssertionLine( void );
 
 /*-----------------------------------------------------------*/
 
-/* See http://www.FreeRTOS.org/RTOS_Intel_Quark_Galileo_GCC.html for usage
-instructions. */
 int main( void )
 {	
 	/* Init the UART, GPIO, etc. */
 	prvSetupHardware();
 
-	main_rxtx_queue();
+	main_popping_tasks();
 
 	return 0;
 }

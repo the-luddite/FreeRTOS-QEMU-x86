@@ -6,7 +6,7 @@ endif
 
 # application
 __c_target = main.c
-__c_target += Blinky_Demo/main_rxtx_queue.c
+__c_target += Popping_Tasks_Demo/main_popping_demo.c
 __c_target += $(wildcard Support_Files/*.c)
 
 __s_target += Qemu/startup.S

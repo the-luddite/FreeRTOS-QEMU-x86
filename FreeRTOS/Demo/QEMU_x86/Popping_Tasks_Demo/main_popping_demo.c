@@ -52,7 +52,7 @@ the queue empty. */
 static void prvQueueReceiveTask( void *pvParameters );
 static void prvQueueSendTask( void *pvParameters );
 
-void main_rxtx_queue( void );
+void main_popping_tasks( void );
 
 /*-----------------------------------------------------------*/
 
@@ -61,7 +61,7 @@ static QueueHandle_t xQueue = NULL;
 
 /*-----------------------------------------------------------*/
 
-void main_rxtx_queue( void )
+void main_popping_tasks( void )
 {
 	/* Create the queue. */
 	xQueue = xQueueCreate( mainQUEUE_LENGTH, sizeof( uint32_t ) );
