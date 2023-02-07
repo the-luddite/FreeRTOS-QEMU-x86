@@ -1,16 +1,26 @@
-# FreeRTOS demo application running on QEMU (x86)
+# FreeRTOS demo application for QEMU i386
 
-A tiny FreeRTOS demo application for QEMU x86
+A tiny FreeRTOS demo application for QEMU i386
 that creates two tasks that wake up one after one sending 
 a message via xQueueReceive.
 
 The demo is originally based on FreeRTOS demo for Intel Gallileo 
-platform (x86 Quark SoC X1000) that is, with some tweaks and tricks, 
-has been ported to QEMU.
+platform (x86 Quark SoC X1000) that has, with some tweaks and tricks, 
+been ported to QEMU i386.
 
-Instead of blinking LED of the hardware, two created FreeRTOS tasks
-send/receive a message and print a message in the QEMU debug console 
+Instead of blinking LED of the hardware, two FreeRTOS tasks
+send/receive a message and then notify a user via the QEMU debug console 
 (https://github.com/QEMU/QEMU/blob/master/hw/char/debugcon.c)
+
+# Directories
+
+    ├── FreeRTOS
+    │   ├── Demo
+    │   │   ├── Common      ~~> Files used by all the demo applications.
+    │   │   └── QEMU_x86    ~~> Platform-specific code, as well as demo application code.
+    │   └── Source          ~~> FreeRTOS kernel source code, see https://github.com/FreeRTOS/FreeRTOS-Kernel.
+    ├── Makefile
+    └── README.md
 
 
 # Setting things up
